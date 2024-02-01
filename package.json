@@ -1,0 +1,29 @@
+{
+  "name": "file-manager",
+  "version": "0.1.0",
+  "description": "implementation File Manager using Node.js APIs.",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goncharof/file-manager.git"
+  },
+  "keywords": [
+    "rs-school",
+    "file-manager",
+    "nodejs"
+  ],
+  "author": "goncharof",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/goncharof/file-manager/issues"
+  },
+  "homepage": "https://github.com/goncharof/file-manager#readme"
+}
