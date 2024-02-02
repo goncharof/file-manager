@@ -10,7 +10,7 @@ printCWD();
 const rl = createInterface({ input, output });
 
 rl.on('line', line => {
-  processInput(line)
+  processInput(line.trim())
   printCWD()
 })
 
