@@ -1,23 +1,29 @@
 import { cwd, chdir } from 'node:process'
 import { homedir } from 'node:os'
-import { join } from 'node:path'
-import { OF } from './constants/error.js'
+import { join, isAbsolute, normalize, resolve } from 'node:path'
+import { DNE } from './constants/error.js'
 
-export const printCWD = () => console.log(`You are currently in ${cwd()}`)
-export const changeDirectory = (path) => {
+const changeDirectory = (path) => {
   try {
-    chdir(path)
+    chdir(resolve(path.trim()))
   } catch {
-    console.log(OF)
+    console.log(DNE)
   }
 }
+
+export const printCWD = () => console.log(`You are currently in ${cwd()}`)
 
 export const navUp = () => {
   try {
     chdir(join(cwd(), '..'))
   } catch {
-    console.log(OF)
+    console.log(DNE)
   }
+}
+
+export const cd = (path) => {
+  console.log(normalize(path), 'normalized path');
+  changeDirectory(isAbsolute(path) ? path : join(cwd(), path))
 }
 
 changeDirectory(homedir())
