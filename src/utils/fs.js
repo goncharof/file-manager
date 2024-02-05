@@ -36,9 +36,10 @@ export const rn = async (fromto, toDir = false) => {
   try {
     const [from, to] = extractPaths(fromto).map(path => resolvePathArg(path));
     if(toDir) {
-      await cp(`${from} ${to}`);
-      await rm(from);
-      console.log(`File ${green(from)} was moved to ${green(to)}`);
+      // await cp(`${from} ${to}`);
+      // await rm(from);
+      await rename (from, join(to, basename(from)));
+      console.log(`File ${green(from)} was moved to ${green(join(to, basename(from)))}`);
     } else {
       await rename(from, to);
       console.log(`File ${green(from)} was renamed to ${green(to)}`);
