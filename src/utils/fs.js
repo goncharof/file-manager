@@ -26,6 +26,7 @@ export const add = async (name) => {
     console.log(join(cwd(), resolvePathArg(name)));
     const fd = await open(resolvePathArg(name), 'wx');
     fd.close();
+    console.log(`File ${green(name)} was created`);
   } catch (err) {
     console.error(ERROR_COLOR, AE);
   }
@@ -37,8 +38,10 @@ export const rn = async (fromto, toDir = false) => {
     if(toDir) {
       await cp(`${from} ${to}`);
       await rm(from);
+      console.log(`File ${green(from)} was moved to ${green(to)}`);
     } else {
       await rename(from, to);
+      console.log(`File ${green(from)} was renamed to ${green(to)}`);
     }
   } catch (e) {
     console.error(red(`source ${FNE} or destination ${AE}`));
@@ -69,6 +72,8 @@ export const cp = async (fromto) => {
     .pipe(
       (await open(destinationPath, 'w')).createWriteStream()
     );
+
+    console.log(`File ${green(source)} was copied to ${green(destinationPath)}`);
   } catch (e) {
     console.error(red('Error during file copy'));
   }
@@ -82,6 +87,7 @@ export const cp = async (fromto) => {
 export const rm = async (path) => {
   try {
     await fsRm(resolvePathArg(path), { force: false })
+    console.log(`File ${green(path)} was removed`);
   } catch {
     console.error(red('FS operation failed'));
   }  

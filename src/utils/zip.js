@@ -4,12 +4,14 @@ import { pipeline } from 'node:stream/promises';
 import { basename, join } from 'node:path';
 import { extractPaths, isPathExists, resolvePathArg } from '../helpers/path.js';
 import { II } from '../constants/error.js';
-import { red } from './logger.js';
+import { red, green } from './logger.js';
 
 
 export const compress = async (fromto) => {
   try {
     let [source, destination] = extractPaths(fromto).map(path => resolvePathArg(path));
+
+    console.log(source, destination);
 
     if((await isPathExists(destination)) && (await stat(destination))?.isDirectory) {
       destination = join(destination, basename(source) + '.br');
@@ -25,6 +27,8 @@ export const compress = async (fromto) => {
       createBrotliCompress(),
       fdDestination.createWriteStream()
     )
+
+    console.log(`File ${green(source)} was compressed to ${green(destination)}`);
   } catch {
     console.error(red(II));
   }
@@ -48,6 +52,8 @@ export const decompress = async (fromto) => {
       createBrotliDecompress(),
       fdDestination.createWriteStream()
     )
+    
+    console.log(`File ${green(source)} was decompressed to ${green(destination)}`);
   } catch {
     console.error(red(II));
   }
