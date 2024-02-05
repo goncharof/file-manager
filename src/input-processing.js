@@ -1,5 +1,5 @@
 import { II } from "./constants/error.js"
-import { ls, add, rn, cp } from "./utils/fs.js";
+import { ls, add, rn, cp, cat } from "./utils/fs.js";
 import { navUp, cd } from "./utils/navigator.js"
 import { osProcessing } from "./utils/os-processing.js";
 import { red } from "./utils/logger.js";
@@ -48,6 +48,9 @@ export const processInput = async (command) => {
       break;
     case command.startsWith('decompress '):  
       await decompress(command.slice(11));
+      break;
+    case command.startsWith('cat '):
+      await cat(command.slice(4));
       break;
     default:
       console.error(red(II))

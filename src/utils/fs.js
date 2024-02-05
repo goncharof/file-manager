@@ -2,8 +2,10 @@ import { readdir } from 'node:fs/promises';
 import { open } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { cwd } from 'node:process';
-import { AE, ERROR_COLOR } from '../constants/error.js';
+import { AE, ERROR_COLOR, FNE } from '../constants/error.js';
 import { isPathExists, resolvePathArg, extractPaths } from '../helpers/path.js';
+import { green, red } from './logger.js';
+import { EOL } from 'node:os';
 
 export const ls = async () => {
   try {
@@ -74,4 +76,17 @@ export const rm = async (path) => {
   } catch {
     console.error(ERROR_COLOR, 'FS operation failed');
   }  
+}
+
+export const cat = async (path) => {
+  try {
+    const fd = await open(resolvePathArg(path), 'r');
+    if(!(await fd.stat()).isFile()) 
+      throw new Error(FNE)
+    const rs = fd.createReadStream();
+    rs.pipe(process.stdout);
+    rs.on('end', () => console.log(green('File was readed successfully')));
+  } catch {
+    console.error(red(FNE));
+  }
 }
