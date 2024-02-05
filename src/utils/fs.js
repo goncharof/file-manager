@@ -5,7 +5,6 @@ import { cwd } from 'node:process';
 import { AE, ERROR_COLOR, FNE } from '../constants/error.js';
 import { isPathExists, resolvePathArg, extractPaths } from '../helpers/path.js';
 import { green, red } from './logger.js';
-import { EOL } from 'node:os';
 
 export const ls = async () => {
   try {
