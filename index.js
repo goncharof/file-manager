@@ -1,7 +1,7 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { username } from './src/username.js';
-import { printCWD } from './src/navigator.js';
+import { printCWD } from './src/utils/navigator.js';
 import { processInput } from './src/input-processing.js';
 
 console.log(`Welcome to the File Manager, ${username}!`);

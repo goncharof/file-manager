@@ -1,7 +1,7 @@
 import { cwd, chdir } from 'node:process'
 import { homedir } from 'node:os'
 import { join, isAbsolute, normalize, resolve } from 'node:path'
-import { DNE } from './constants/error.js'
+import { DNE } from '../constants/error.js'
 
 const changeDirectory = (path) => {
   try {

@@ -1,5 +1,5 @@
 import { EOL, arch, cpus, homedir, userInfo } from 'node:os';
-import { ERROR_COLOR, II } from './constants/error.js';
+import { ERROR_COLOR, II } from '../constants/error.js';
 
 export const osProcessing = (arg) => {
   switch (arg) {

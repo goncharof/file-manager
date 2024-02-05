@@ -2,8 +2,8 @@ import { readdir } from 'node:fs/promises';
 import { open } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { cwd } from 'node:process';
-import { AE, ERROR_COLOR } from './constants/error.js';
-import { isPathExists, resolvePathArg, extractPaths } from './helpers/path.js';
+import { AE, ERROR_COLOR } from '../constants/error.js';
+import { isPathExists, resolvePathArg, extractPaths } from '../helpers/path.js';
 
 export const ls = async () => {
   try {

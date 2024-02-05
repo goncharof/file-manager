@@ -1,7 +1,7 @@
 import { II, ERROR_COLOR } from "./constants/error.js"
-import { ls, add, rn, cp } from "./fs.js";
-import { navUp, cd } from "./navigator.js"
-import { osProcessing } from "./os-processing.js";
+import { ls, add, rn, cp } from "./utils/fs.js";
+import { navUp, cd } from "./utils/navigator.js"
+import { osProcessing } from "./utils/os-processing.js";
 
 export const processInput = async (command) => {
   console.log(`Command: ${command}`);
@@ -10,14 +10,12 @@ export const processInput = async (command) => {
       return false;
       case 'up':
         navUp();
-        break;
+        return true;
       case 'ls':
         await ls();
-        break;
+        return true;
   }
   
-  console.log(123);
-
   switch (true) {
     case command.startsWith('cd '):
       cd(command.slice(3));
