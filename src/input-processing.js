@@ -43,6 +43,12 @@ export const processInput = async (command) => {
     case command.startsWith('hash '):  
       await calculateHash(command.slice(5));
       break;
+    case command.startsWith('compress '):
+      await compress(command.slice(9));
+      break;
+    case command.startsWith('decompress '):  
+      await decompress(command.slice(11));
+      break;
     default:
       console.error(red(II))
   }
