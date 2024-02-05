@@ -1,5 +1,6 @@
 export const OF = 'Operation failed'
-export const DNE = 'directory does not exist'
+export const DNE = 'Directory does not exist'
+export const FNE = 'File does not exist'
 export const II = 'Invalid input'
 export const AE = 'File already exists'
 

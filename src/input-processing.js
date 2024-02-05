@@ -1,7 +1,9 @@
-import { II, ERROR_COLOR } from "./constants/error.js"
+import { II } from "./constants/error.js"
 import { ls, add, rn, cp } from "./utils/fs.js";
 import { navUp, cd } from "./utils/navigator.js"
 import { osProcessing } from "./utils/os-processing.js";
+import { red } from "./utils/logger.js";
+import { calculateHash } from "./utils/hash.js";
 
 export const processInput = async (command) => {
   console.log(`Command: ${command}`);
@@ -38,8 +40,11 @@ export const processInput = async (command) => {
     case command.startsWith('os '):      
       osProcessing(command.slice(3));
       break;
+    case command.startsWith('hash '):  
+      await calculateHash(command.slice(5));
+      break;
     default:
-      console.error(ERROR_COLOR, II)
+      console.error(red(II))
   }
 
   return true;
