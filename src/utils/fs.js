@@ -1,9 +1,10 @@
-import { readdir } from 'node:fs/promises';
-import { open } from 'node:fs/promises';
+import { readdir, rename } from 'node:fs/promises';
+import { open, mkdir, rm as fsRm } from 'node:fs/promises';
 import { join, basename } from 'node:path';
 import { cwd } from 'node:process';
+import { EOL } from 'node:os';
 import { AE, ERROR_COLOR, FNE } from '../constants/error.js';
-import { isPathExists, resolvePathArg, extractPaths } from '../helpers/path.js';
+import { resolvePathArg, extractPaths } from '../helpers/path.js';
 import { green, red } from './logger.js';
 
 export const ls = async () => {
@@ -22,35 +23,54 @@ export const ls = async () => {
 
 export const add = async (name) => {
   try {
-    await open(join(cwd(), resolvePathArg(name)), 'wx');
+    console.log(join(cwd(), resolvePathArg(name)));
+    const fd = await open(resolvePathArg(name), 'wx');
+    fd.close();
   } catch (err) {
     console.error(ERROR_COLOR, AE);
   }
 };
 
-export const rn = async (fromto) => {
-  const [from, to] = extractPaths(fromto).map(path => resolvePathArg(path));
-
-  if (await isPathExists(to) || !(await isPathExists(from))) {
-    throw new Error('FS operation failed');
-  } else {
-    await fsRename(from, to);
+export const rn = async (fromto, toDir = false) => {
+  try {
+    const [from, to] = extractPaths(fromto).map(path => resolvePathArg(path));
+    if(toDir) {
+      await cp(`${from} ${to}`);
+      await rm(from);
+    } else {
+      await rename(from, to);
+    }
+  } catch (e) {
+    console.error(red(`source ${FNE} or destination ${AE}`));
   }
 };
 
 export const cp = async (fromto) => {
   const [source, newDir] = extractPaths(fromto).map(path => resolvePathArg(path));
-  
-  if ((await isPathExists(source))) {
-    console.error(ERROR_COLOR, 'FS operation failed, source file does not exist');
+
+  let fd;
+  try {
+    fd = await open(source, 'r');
+    if(!(await fd.stat()).isFile()) 
+      throw new Error(FNE)
+  } catch {
+    console.error(red(`Source ${FNE}`));
+    return;
+  } finally {
+    fd?.close();
   }
 
-  const  destinationPath = join(newDir, basename(source));
+  await mkdir(resolvePathArg(newDir), { recursive: true });
+
+  const  destinationPath = join(resolvePathArg(newDir), basename(source));
 
   try {
-    (await open(source), 'r').pipe(await open(destinationPath, 'w'));
-  } catch {
-    console.error(ERROR_COLOR,'Error during file copy');
+    (await open(source, 'r')).createReadStream()
+    .pipe(
+      (await open(destinationPath, 'w')).createWriteStream()
+    );
+  } catch (e) {
+    console.error(red('Error during file copy'));
   }
 
   return {
@@ -59,21 +79,11 @@ export const cp = async (fromto) => {
   }
 };
 
-export const mv = async (fromto) => {
-  try {
-    const { source } = await cp(fromto);
-    await rm(source);
-  } catch {
-    console.error(ERROR_COLOR, 'FS operation failed');
-  }
-  
-}
-
 export const rm = async (path) => {
   try {
-    await rm(resolvePathArg(path), { force: false })
+    await fsRm(resolvePathArg(path), { force: false })
   } catch {
-    console.error(ERROR_COLOR, 'FS operation failed');
+    console.error(red('FS operation failed'));
   }  
 }
 
@@ -84,7 +94,7 @@ export const cat = async (path) => {
       throw new Error(FNE)
     const rs = fd.createReadStream();
     rs.pipe(process.stdout);
-    rs.on('end', () => console.log(green('File was readed successfully')));
+    rs.on('end', () => console.log(`${EOL}${green('File was readed successfully')}`));
   } catch {
     console.error(red(FNE));
   }
