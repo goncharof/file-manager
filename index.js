@@ -9,9 +9,10 @@ printCWD();
 
 const rl = createInterface({ input, output });
 
-rl.on('line', line => {
-  processInput(line.trim())
-  printCWD()
+rl.on('line', async line => {
+  await processInput(line.trim())
+    ? printCWD()
+    : rl.close()
 })
 
 rl.on('close', () => {
