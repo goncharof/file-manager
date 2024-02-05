@@ -10,12 +10,12 @@ export const processInput = async (command) => {
   switch (command) {
     case '.exit':
       return false;
-      case 'up':
-        navUp();
-        return true;
-      case 'ls':
-        await ls();
-        return true;
+    case 'up':
+      navUp();
+      return true;
+    case 'ls':
+      await ls();
+      return true;
   }
   
   switch (true) {
