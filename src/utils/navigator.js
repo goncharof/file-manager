@@ -1,30 +1,25 @@
 import { cwd, chdir } from 'node:process'
 import { homedir } from 'node:os'
-import { join, isAbsolute, normalize, resolve } from 'node:path'
 import { DNE } from '../constants/error.js'
 import { blue, red, yellow } from './logger.js'
-
-const changeDirectory = (path) => {
-  try {
-    chdir(resolve(path.trim()))
-  } catch {
-    console.error(red(DNE))
-  }
-}
+import { resolvePathArg } from '../helpers/path.js'
 
 export const printCWD = () => console.log(`${blue('You are currently in ')}${yellow(cwd())}`);
 
 export const navUp = () => {
   try {
-    chdir(join(cwd(), '..'))
+    chdir(resolvePathArg('..'))
   } catch {
-    console.log(DNE)
+    console.error(red(DNE))
   }
 }
 
 export const cd = (path) => {
-  console.log(normalize(path), 'normalized path');
-  changeDirectory(isAbsolute(path) ? path : join(cwd(), path))
+  try {
+    chdir(resolvePathArg(path))
+  } catch {
+    console.error(red(DNE))
+  }
 }
 
-changeDirectory(homedir())
+cd(homedir())
