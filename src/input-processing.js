@@ -1,13 +1,39 @@
 import { II } from "./constants/error.js"
-import { ls, add, rn, cp, cat } from "./utils/fs.js";
+import { ls, add, rn, cp, cat, rm } from "./utils/fs.js";
 import { navUp, cd } from "./utils/navigator.js"
 import { osProcessing } from "./utils/os.js";
 import { red } from "./utils/logger.js";
 import { calculateHash } from "./utils/hash.js";
 
+export const printHelp = () => {
+  console.table([
+    { command: '.help', description: 'Print help' },
+    { command: '.exit', description: 'Exit' },
+    { command: 'up', description: 'Go up' },
+    { command: 'ls', description: 'List files' },
+    { command: 'cat', description: 'Print file content', params: '<path_to_file>' },
+    { command: 'cd', description: 'Change directory', params: '<path_to_directory>' },
+    { command: 'add', description: 'Add new file', params: '<new_file_name>' },
+    { command: 'rn', description: 'Rename file', params: '<path_to_file> <new_filename>' },
+    { command: 'cp', description: 'Copy file', params: '<path_to_file> <path_to_new_directory>' },
+    { command: 'mv', description: 'Move file', params: '<path_to_file> <path_to_new_directory>' },
+    { command: 'rm', description: 'Remove file', params: '<path_to_file>' },
+    { command: 'os', description: 'Print OS info', params: '<--EOL --cpus --homedir --username --architecture>' },
+    { command: 'hash', description: 'Calculate hash', params: '<path_to_file> <path_to_destination>' },
+    { command: 'compress', description: 'Compress file', params: '<path_to_file> <path_to_destination>' },
+    { command: 'decompress', description: 'Decompress file', params: '<path_to_file> <path_to_destination>' }
+  ]);
+}
+printHelp();
+
 export const processInput = async (command) => {
   console.log(`Command: ${command}`);
   switch (command) {
+    case '':
+      return true;
+    case '.help':
+      printHelp();
+      return true;
     case '.exit':
       return false;
     case 'up':
