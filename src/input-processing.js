@@ -1,7 +1,7 @@
 import { II } from "./constants/error.js"
 import { ls, add, rn, cp, cat } from "./utils/fs.js";
 import { navUp, cd } from "./utils/navigator.js"
-import { osProcessing } from "./utils/os-processing.js";
+import { osProcessing } from "./utils/os.js";
 import { red } from "./utils/logger.js";
 import { calculateHash } from "./utils/hash.js";
 
