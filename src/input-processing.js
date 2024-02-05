@@ -4,6 +4,7 @@ import { navUp, cd } from "./utils/navigator.js"
 import { osProcessing } from "./utils/os.js";
 import { red } from "./utils/logger.js";
 import { calculateHash } from "./utils/hash.js";
+import { compress, decompress } from './utils/zip.js';
 
 export const printHelp = () => {
   console.table([
@@ -27,7 +28,6 @@ export const printHelp = () => {
 printHelp();
 
 export const processInput = async (command) => {
-  console.log(`Command: ${command}`);
   switch (command) {
     case '':
       return true;
@@ -54,11 +54,11 @@ export const processInput = async (command) => {
     case command.startsWith('rn '):
       await rn(command.slice(3));
       break;
+    case command.startsWith('mv '):
+      await rn(command.slice(3), true);
+      break;  
     case command.startsWith('cp '):
       await cp(command.slice(3));
-      break;
-    case command.startsWith('mv '):
-      await cp(command.slice(3));  
       break;
     case command.startsWith('rm '):
       await rm(command.slice(3));
