@@ -1,13 +1,5 @@
 import { access, constants } from 'node:fs/promises';
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
-
-
-export function extendedDirname(url, ...paths) {
-  const filename = fileURLToPath(url);
-
-  return join(dirname(filename), ...paths);
-}
+import { join, isAbsolute } from "node:path";
 
 export async function isPathExists (filename) {
   try {
@@ -17,3 +9,14 @@ export async function isPathExists (filename) {
     return false;
   }
 }
+
+export const resolvePathArg = (arg) => {
+  arg = arg.replace(/^"(.+(?="$))"$/, '$1').trim();
+
+  return isAbsolute(arg) ? arg : join(process.cwd(), arg)
+}
+
+export const extractPaths = (inputString) => 
+  inputString
+    .match(/(?:"[^"]*"|\S+)/g)
+    .map(path => path.replace(/^"(.+)"$/, '$1'));
